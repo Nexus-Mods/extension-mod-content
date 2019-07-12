@@ -9,7 +9,7 @@ interface ITypeDescription {
 export const typeDescription: { [id: string]: ITypeDescription } = {
   texture: { icon: 'texture', tooltip: 'Textures' },
   mesh: { icon: 'mesh', tooltip: 'Meshes' },
-  plugin: { icon: 'plugins', tooltip: 'Game Plugins' },
+  plugin: { icon: 'plugin', tooltip: 'Game Plugins' },
   music: { icon: 'music', tooltip: 'Music & Sound' },
   interface: { icon: 'interface', tooltip: 'Interface' },
   archive: { icon: 'archive', tooltip: 'Asset Bundle' },
