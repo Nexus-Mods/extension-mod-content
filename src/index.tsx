@@ -1,30 +1,41 @@
-import { fileTypes } from './filetypes';
+import { fileTypes, typeDescription } from './filetypes';
 import ModContent from './ModContent';
 
 import * as path from 'path';
 import * as React from 'react';
 import turbowalk from 'turbowalk';
 import { actions, selectors, types, util } from 'vortex-api';
+import * as va from 'vortex-api';
+
+const { OptionsFilter } = va as any;
+
+const readQueue = (util as any).makeQueue();
 
 function readModContent(stagingPath: string, gameId: string)
     : Promise<{ typesFound: string[], empty: boolean }> {
   const typesFound: Set<string> = new Set();
   let empty: boolean = true;
-  return turbowalk(stagingPath, entries => {
-    if (empty && (entries.find(iter => !iter.isDirectory) !== undefined)) {
-      empty = false;
-    }
-    entries.forEach(entry => {
-      const ext = path.extname(entry.filePath).toLowerCase();
-      const possibleTypes = fileTypes[ext] || [];
-      const ft = possibleTypes.find(iter =>
-        (iter.condition === undefined) || iter.condition(gameId, entry));
-      if (ft !== undefined) {
-        typesFound.add(ft.type);
+  return readQueue(() => {
+    return turbowalk(stagingPath, entries => {
+      if (empty && (entries.find(iter => !iter.isDirectory) !== undefined)) {
+        empty = false;
       }
+      entries.forEach(entry => {
+        const ext = path.extname(entry.filePath).toLowerCase();
+        const possibleTypes = fileTypes[ext] || [];
+        const ft = possibleTypes.find(iter =>
+          (iter.condition === undefined) || iter.condition(gameId, entry));
+        if (ft !== undefined) {
+          typesFound.add(ft.type);
+        }
+      });
     });
-  })
+  }, false)
   .then(() => ({ typesFound: Array.from(typesFound), empty }));
+}
+
+function capitalize(input: string): string {
+  return input.charAt(0).toUpperCase() + input.slice(1);
 }
 
 function main(context: types.IExtensionContext) {
@@ -48,7 +59,7 @@ function main(context: types.IExtensionContext) {
   };
 
   context.registerTableAttribute('mods', {
-    id: 'modContent',
+    id: 'content',
     name: 'Content',
     description: 'Content',
     icon: 'inspect',
@@ -61,7 +72,12 @@ function main(context: types.IExtensionContext) {
       }
       return <ModContent t={context.api.translate} mod={mod} />;
     },
-    calc: (mod: types.IMod) => util.getSafe(mod.attributes, ['content'], []),
+    calc: (mod: types.IMod) => util.getSafe(mod, ['attributes', 'content'], []),
+    filter: new OptionsFilter(
+      [].concat(
+        [{ value: OptionsFilter.EMPTY, label: '<No Content>' }],
+        Object.keys(typeDescription).sort().map(id => ({ value: id, label: capitalize(id) })))
+        , true, false),
     isToggleable: true,
     edit: {},
     isSortable: true,

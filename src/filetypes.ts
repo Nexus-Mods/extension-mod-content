@@ -7,19 +7,19 @@ interface ITypeDescription {
 }
 
 export const typeDescription: { [id: string]: ITypeDescription } = {
-  texture: { icon: 'texture', tooltip: 'Textures' },
-  mesh: { icon: 'mesh', tooltip: 'Meshes' },
-  plugin: { icon: 'plugin', tooltip: 'Game Plugins' },
-  music: { icon: 'music', tooltip: 'Music & Sound' },
-  interface: { icon: 'interface', tooltip: 'Interface' },
-  archive: { icon: 'archive', tooltip: 'Asset Bundle' },
-  shader: { icon: 'shader', tooltip: 'Graphics Shaders' },
-  script: { icon: 'script', tooltip: 'Scripts' },
-  config: { icon: 'config', tooltip: 'Configuration' },
+  texture:    { icon: 'texture', tooltip: 'Textures' },
+  mesh:       { icon: 'mesh', tooltip: 'Meshes' },
+  plugin:     { icon: 'plugin', tooltip: 'Game Plugins' },
+  music:      { icon: 'music', tooltip: 'Music & Sound' },
+  interface:  { icon: 'interface', tooltip: 'Interface' },
+  archive:    { icon: 'archive', tooltip: 'Asset Bundle' },
+  shader:     { icon: 'shader', tooltip: 'Graphics Shaders' },
+  script:     { icon: 'script', tooltip: 'Scripts' },
+  config:     { icon: 'config', tooltip: 'Configuration' },
   executable: { icon: 'executable', tooltip: 'Executable (Tools and such)' },
-  extender: { icon: 'extender', tooltip: 'Extends modding capabilities' },
-  map: { icon: 'map', tooltip: 'Game Map' },
-  animation: { icon: 'animation', tooltip: 'Animations' },
+  extender:   { icon: 'extender', tooltip: 'Extends modding capabilities' },
+  map:        { icon: 'map', tooltip: 'Game Map' },
+  animation:  { icon: 'animation', tooltip: 'Animations' },
 };
 
 interface IFileType {
@@ -50,7 +50,6 @@ const gamesUsingImagesAsTextures = new Set([
 
 export const fileTypes: { [ext: string]: IFileType[] } = {
   '.dds': [{ type: 'texture' }],
-  '.nif': [{ type: 'mesh' }],
   '.exe': [{ type: 'executable' }],
   '.bat': [{ type: 'executable' }],
   '.cmd': [{ type: 'executable' }],
@@ -74,8 +73,10 @@ export const fileTypes: { [ext: string]: IFileType[] } = {
 
   '.unity3d': [{ type: 'archive' }],
   '.arc': [{ type: 'archive' }],
+  '.tri': [{ type: 'mesh' }], // facegen
 
   // gamebryo formats
+  '.nif': [{ type: 'mesh' }], // net immerse
   '.xwm': [{ type: 'music' }],
   '.bsa': [{ type: 'archive' }],
   '.ba2': [{ type: 'archive' }],
@@ -85,6 +86,7 @@ export const fileTypes: { [ext: string]: IFileType[] } = {
   '.pex': [{ type: 'script' }],
   '.dll': [{ type: 'extender', condition: supportsScriptExtender },
            { type: 'plugin', condition: gameId => gamesUsingDLLPlugins.has(gameId) }],
+  '.hkx': [{ type: 'animation' }],
 
   // sims 4
   '.ts4script': [{ type: 'script' }],
