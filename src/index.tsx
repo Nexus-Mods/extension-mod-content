@@ -39,7 +39,7 @@ function capitalize(input: string): string {
 }
 
 function main(context: types.IExtensionContext) {
-  context.requireVersion('>0.18.13');
+  context.requireVersion('>0.18.14');
   const onUpdateContent = (gameId: string, modId: string, typesFound: string[], empty: boolean) => {
     context.api.store.dispatch(actions.setModAttribute(gameId, modId, 'content', typesFound));
     context.api.store.dispatch(actions.setModAttribute(gameId, modId, 'noContent', empty));
@@ -54,7 +54,10 @@ function main(context: types.IExtensionContext) {
         onUpdateContent(gameId, mod.id, typesFound, empty);
       })
       .catch(err => {
-        context.api.showErrorNotification('Failed to determine mod content', err);
+        // this may happen while installing a mod
+        if (err.code !== 'ENOTFOUND') {
+          context.api.showErrorNotification('Failed to determine mod content', err);
+        }
       });
   };
 
