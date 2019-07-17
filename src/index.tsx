@@ -11,6 +11,19 @@ const { OptionsFilter } = va as any;
 
 const readQueue = (util as any).makeQueue();
 
+function compareArray(lhs: string[], rhs: string[]): number {
+  const lSorted = lhs.slice().sort();
+  const rSorted = rhs.slice().sort();
+
+  for (let i = 0; i < Math.min(lSorted.length, rSorted.length); ++i) {
+    if (lSorted[i] !== rSorted[i]) {
+      return lSorted[i].localeCompare(rSorted[i]);
+    }
+  }
+
+  return lSorted.length - rSorted.length;
+}
+
 function readModContent(stagingPath: string, gameId: string)
     : Promise<{ typesFound: string[], empty: boolean }> {
   const typesFound: Set<string> = new Set();
@@ -39,7 +52,7 @@ function capitalize(input: string): string {
 }
 
 function main(context: types.IExtensionContext) {
-  context.requireVersion('>0.18.14');
+  context.requireVersion('>=0.19.0');
   const onUpdateContent = (gameId: string, modId: string, typesFound: string[], empty: boolean) => {
     context.api.store.dispatch(actions.setModAttribute(gameId, modId, 'content', typesFound));
     context.api.store.dispatch(actions.setModAttribute(gameId, modId, 'noContent', empty));
@@ -69,7 +82,8 @@ function main(context: types.IExtensionContext) {
     placement: 'table',
     customRenderer: (mod: types.IMod) => {
       const state = context.api.store.getState();
-      if ((util.getSafe(mod, ['attributes', 'content'], undefined) === undefined)
+      if ((mod.state === 'installed')
+          && (util.getSafe(mod, ['attributes', 'content'], undefined) === undefined)
           && (mod.installationPath !== undefined)) {
         updateContent(state, mod);
       }
@@ -85,6 +99,7 @@ function main(context: types.IExtensionContext) {
     edit: {},
     isSortable: true,
     isDefaultVisible: false,
+    sortFunc: compareArray,
   });
 
   const refreshContent = (instanceIds: string[]) => {
@@ -110,7 +125,9 @@ function main(context: types.IExtensionContext) {
     context.api.events.on('mod-content-changed', (gameId: string, modId: string) => {
       const state = context.api.store.getState();
       const mod = util.getSafe(state.persistent.mods, [gameId, modId], undefined);
-      updateContent(state, mod);
+      if (mod !== undefined) {
+        updateContent(state, mod);
+      }
     });
 
     return (util as any).installIconSet('mod-content', path.join(__dirname, 'icons.svg'));

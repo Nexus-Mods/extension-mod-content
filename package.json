@@ -1,6 +1,6 @@
 {
   "name": "mod-content",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Add mod column indicating the content it contains",
   "main": "./out/index.js",
   "repository": "",

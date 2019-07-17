@@ -15,6 +15,7 @@ class ModContent extends ComponentEx<IModContentProps, {}> {
     const content = util.getSafe(mod.attributes, ['noContent'], false)
       ? <div className='mod-content-empty' >{t('Empty')}</div>
       : util.getSafe(mod.attributes, ['content'], [])
+        .slice(0).sort()
         .map((typeId: string) => (typeDescription[typeId] !== undefined) ? (
           <IconX
             key={typeId}
