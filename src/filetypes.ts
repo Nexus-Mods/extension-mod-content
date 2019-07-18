@@ -7,20 +7,29 @@ interface ITypeDescription {
 }
 
 export const typeDescription: { [id: string]: ITypeDescription } = {
+  plugin:     { icon: 'plugin', tooltip: 'Game Plugins' },
+  interface:  { icon: 'interface', tooltip: 'Interface' },
   texture:    { icon: 'texture', tooltip: 'Textures' },
   mesh:       { icon: 'mesh', tooltip: 'Meshes' },
-  plugin:     { icon: 'plugin', tooltip: 'Game Plugins' },
+  animation:  { icon: 'animation', tooltip: 'Animations' },
+  map:        { icon: 'map', tooltip: 'Game Map' },
   music:      { icon: 'music', tooltip: 'Music & Sound' },
-  interface:  { icon: 'interface', tooltip: 'Interface' },
-  archive:    { icon: 'archive', tooltip: 'Asset Bundle' },
   shader:     { icon: 'shader', tooltip: 'Graphics Shaders' },
+  archive:    { icon: 'archive', tooltip: 'Asset Bundle' },
   script:     { icon: 'script', tooltip: 'Scripts' },
+  extender:   { icon: 'extender', tooltip: 'Extends modding capabilities' },
   config:     { icon: 'config', tooltip: 'Configuration' },
   executable: { icon: 'executable', tooltip: 'Executable (Tools and such)' },
-  extender:   { icon: 'extender', tooltip: 'Extends modding capabilities' },
-  map:        { icon: 'map', tooltip: 'Game Map' },
-  animation:  { icon: 'animation', tooltip: 'Animations' },
 };
+
+export const typeIndices = Object.keys(typeDescription).reduce((prev, type, idx) => {
+  prev[type] = idx;
+  return prev;
+}, {});
+
+export function byTypeIndex(lhs: string, rhs: string): number {
+  return typeIndices[lhs] - typeIndices[rhs];
+}
 
 interface IFileType {
   type: string;

@@ -1,4 +1,4 @@
-import { typeDescription } from './filetypes';
+import { byTypeIndex, typeDescription } from './filetypes';
 
 import * as React from 'react';
 import { ComponentEx, tooltip, types, util } from 'vortex-api';
@@ -15,7 +15,7 @@ class ModContent extends ComponentEx<IModContentProps, {}> {
     const content = util.getSafe(mod.attributes, ['noContent'], false)
       ? <div className='mod-content-empty' >{t('Empty')}</div>
       : util.getSafe(mod.attributes, ['content'], [])
-        .slice(0).sort()
+        .slice(0).sort(byTypeIndex)
         .map((typeId: string) => (typeDescription[typeId] !== undefined) ? (
           <IconX
             key={typeId}

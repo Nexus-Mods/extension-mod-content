@@ -1,4 +1,4 @@
-import { fileTypes, typeDescription } from './filetypes';
+import { byTypeIndex, fileTypes, typeDescription, typeIndices } from './filetypes';
 import ModContent from './ModContent';
 
 import * as path from 'path';
@@ -12,12 +12,12 @@ const { OptionsFilter } = va as any;
 const readQueue = (util as any).makeQueue();
 
 function compareArray(lhs: string[], rhs: string[]): number {
-  const lSorted = lhs.slice().sort();
-  const rSorted = rhs.slice().sort();
+  const lSorted = lhs.slice().sort(byTypeIndex);
+  const rSorted = rhs.slice().sort(byTypeIndex);
 
   for (let i = 0; i < Math.min(lSorted.length, rSorted.length); ++i) {
     if (lSorted[i] !== rSorted[i]) {
-      return lSorted[i].localeCompare(rSorted[i]);
+      return typeIndices[lSorted[i]] - typeIndices[rSorted[i]];
     }
   }
 
@@ -91,9 +91,11 @@ function main(context: types.IExtensionContext) {
     },
     calc: (mod: types.IMod) => util.getSafe(mod, ['attributes', 'content'], []),
     filter: new OptionsFilter(
-      [].concat(
-        [{ value: OptionsFilter.EMPTY, label: '<No Content>' }],
-        Object.keys(typeDescription).sort().map(id => ({ value: id, label: capitalize(id) })))
+      [].concat([{ value: OptionsFilter.EMPTY, label: '<No Content>' }],
+        Object
+          .keys(typeDescription)
+          .sort()
+          .map(id => ({ value: id, label: capitalize(id) })))
         , true, false),
     isToggleable: true,
     edit: {},
