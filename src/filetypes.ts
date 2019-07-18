@@ -83,6 +83,7 @@ export const fileTypes: { [ext: string]: IFileType[] } = {
   '.unity3d': [{ type: 'archive' }],
   '.arc': [{ type: 'archive' }],
   '.tri': [{ type: 'mesh' }], // facegen
+  '.pak': [{ type: 'archive' }],
 
   // gamebryo formats
   '.nif': [{ type: 'mesh' }], // net immerse
