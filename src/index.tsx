@@ -61,6 +61,10 @@ function main(context: types.IExtensionContext) {
   const updateContent = (state: types.IState, mod: types.IMod) => {
     const gameId = selectors.activeGameId(state);
     const stagingPath = selectors.installPath(state);
+    if ((stagingPath === undefined)
+        || (mod.installationPath === undefined)) {
+      return;
+    }
     onUpdateContent(gameId, mod.id, [], false);
     readModContent(path.join(stagingPath, mod.installationPath), gameId)
       .then(({ typesFound, empty }) => {
