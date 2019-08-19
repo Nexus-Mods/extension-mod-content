@@ -89,7 +89,7 @@ function main(context: types.IExtensionContext) {
       if ((mod.state === 'installed')
           && (util.getSafe(mod, ['attributes', 'content'], undefined) === undefined)
           && (mod.installationPath !== undefined)) {
-        updateContent(state, mod);
+        setTimeout(() => updateContent(state, mod), 0);
       }
       return <ModContent t={context.api.translate} mod={mod} />;
     },
