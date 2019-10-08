@@ -93,7 +93,7 @@ function main(context: types.IExtensionContext) {
       }
       return <ModContent t={context.api.translate} mod={mod} />;
     },
-    calc: (mod: types.IMod) => util.getSafe(mod, ['attributes', 'content'], []),
+    calc: (mod: types.IMod) => util.getSafe(mod, ['attributes', 'content'], []).map(capitalize),
     filter: new OptionsFilter(
       [].concat([{ value: OptionsFilter.EMPTY, label: '<No Content>' }],
         Object
@@ -104,9 +104,10 @@ function main(context: types.IExtensionContext) {
     isToggleable: true,
     edit: {},
     isSortable: true,
+    isGroupable: true,
     isDefaultVisible: false,
     sortFunc: compareArray,
-  });
+  } as any);
 
   const refreshContent = (instanceIds: string[]) => {
     const state = context.api.store.getState();
