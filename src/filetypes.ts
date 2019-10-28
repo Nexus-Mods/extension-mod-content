@@ -123,4 +123,13 @@ export const fileTypes: { [ext: string]: IFileType[] } = {
 
   // Dragon Age
   '.ani': [{ type: 'animation' }],
+
+  // Rage Engine (GTA and such)
+  '.rpf': [{ type: 'archive' }],
+  '.asi': [{ type: 'extender' }],
+  '.ytd': [{ type: 'texture' }],
+  '.awc': [{ type: 'music' }],
+  '.ymt': [{ type: 'config' }],
+  '.gfx': [{ type: 'interface' }],
+  '.meta': [{ type: 'config' }],
 };
