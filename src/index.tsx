@@ -99,7 +99,10 @@ function main(context: types.IExtensionContext) {
         Object
           .keys(typeDescription)
           .sort()
-          .map(id => ({ value: id, label: capitalize(id) })))
+          .map(id => {
+            const capId = capitalize(id);
+            return { value: capId, label: capId };
+          }))
         , true, false),
     isToggleable: true,
     edit: {},
