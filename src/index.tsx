@@ -12,8 +12,8 @@ const { OptionsFilter } = va as any;
 const readQueue = (util as any).makeQueue();
 
 function compareArray(lhs: string[], rhs: string[]): number {
-  const lSorted = lhs.slice().sort(byTypeIndex);
-  const rSorted = rhs.slice().sort(byTypeIndex);
+  const lSorted = lhs.map(i => i.toLowerCase()).sort(byTypeIndex);
+  const rSorted = rhs.map(i => i.toLowerCase()).sort(byTypeIndex);
 
   for (let i = 0; i < Math.min(lSorted.length, rSorted.length); ++i) {
     if (lSorted[i] !== rSorted[i]) {
