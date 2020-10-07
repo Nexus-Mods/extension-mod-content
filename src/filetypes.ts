@@ -54,7 +54,7 @@ const gamesUsingDLLPlugins = new Set([
 ]);
 
 const gamesUsingImagesAsTextures = new Set([
-  'stardewvalley', 'darksouls2',
+  'stardewvalley', 'darksouls2', 'intothebreach'
 ]);
 
 export const fileTypes: { [ext: string]: IFileType[] } = {
@@ -132,4 +132,7 @@ export const fileTypes: { [ext: string]: IFileType[] } = {
   '.ymt': [{ type: 'config' }],
   '.gfx': [{ type: 'interface' }],
   '.meta': [{ type: 'config' }],
+
+  //Into the Breach
+  '.lua': [{type: 'script'}]
 };
