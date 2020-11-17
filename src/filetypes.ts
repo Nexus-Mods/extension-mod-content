@@ -133,6 +133,6 @@ export const fileTypes: { [ext: string]: IFileType[] } = {
   '.gfx': [{ type: 'interface' }],
   '.meta': [{ type: 'config' }],
 
-  //Into the Breach
-  '.lua': [{type: 'script'}]
+  // Into the Breach
+  '.lua': [{type: 'script'}],
 };
