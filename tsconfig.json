@@ -8,6 +8,8 @@
     "preserveConstEnums": true,
     "rootDir": "./src",
     "outDir": "./out",
+    "skipLibCheck": true,
+    "esModuleInterop": true,
     "jsx": "react",
     "sourceMap": false
   },

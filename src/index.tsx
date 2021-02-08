@@ -5,9 +5,7 @@ import * as path from 'path';
 import * as React from 'react';
 import turbowalk from 'turbowalk';
 import { actions, selectors, types, util } from 'vortex-api';
-import * as va from 'vortex-api';
-
-const { OptionsFilter } = va as any;
+import { OptionsFilter } from 'vortex-api';
 
 const readQueue = (util as any).makeQueue();
 
@@ -94,14 +92,14 @@ function main(context: types.IExtensionContext) {
       return <ModContent t={context.api.translate} mod={mod} />;
     },
     calc: (mod: types.IMod) => util.getSafe(mod, ['attributes', 'content'], []).map(capitalize),
-    filter: new OptionsFilter(
-      [].concat([{ value: OptionsFilter.EMPTY, label: '<No Content>' }],
+    filter: new OptionsFilter(() =>
+      [].concat([{ value: OptionsFilter.EMPTY, label: `<${context.api.translate('No Content')}>` }],
         Object
           .keys(typeDescription)
           .sort()
           .map(id => {
             const capId = capitalize(id);
-            return { value: capId, label: capId };
+            return { value: capId, label: context.api.translate(capId) };
           }))
         , true, false),
     isToggleable: true,
