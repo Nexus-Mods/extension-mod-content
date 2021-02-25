@@ -70,7 +70,7 @@ function main(context: types.IExtensionContext) {
       })
       .catch(err => {
         // this may happen while installing a mod
-        if (err.code !== 'ENOTFOUND') {
+        if (!['ENOENT', 'ENOTFOUND'].includes(err.code)) {
           context.api.showErrorNotification('Failed to determine mod content', err);
         }
       });
