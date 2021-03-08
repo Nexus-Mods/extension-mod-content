@@ -39,6 +39,7 @@ interface IFileType {
 const scriptExtenderGames = new Set([
   'oblivion', 'skyrim', 'skyrimse', 'skyrimvr',
   'fallout3', 'falloutnv', 'fallout4', 'fallout4vr',
+  'enderal', 'enderalspecialedition',
 ]);
 
 function supportsScriptExtender(gameId: string): boolean {
@@ -54,7 +55,7 @@ const gamesUsingDLLPlugins = new Set([
 ]);
 
 const gamesUsingImagesAsTextures = new Set([
-  'stardewvalley', 'darksouls2', 'intothebreach'
+  'stardewvalley', 'darksouls2', 'intothebreach',
 ]);
 
 export const fileTypes: { [ext: string]: IFileType[] } = {
