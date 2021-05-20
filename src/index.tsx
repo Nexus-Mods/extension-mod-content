@@ -56,17 +56,21 @@ function main(context: types.IExtensionContext) {
     context.api.store.dispatch(actions.setModAttribute(gameId, modId, 'noContent', empty));
   };
 
-  const updateContent = (state: types.IState, mod: types.IMod) => {
+  const updateContent = (state: types.IState, mod: types.IMod, reset: boolean) => {
     const gameId = selectors.activeGameId(state);
     const stagingPath = selectors.installPath(state);
     if ((stagingPath === undefined)
         || (mod.installationPath === undefined)) {
       return;
     }
-    onUpdateContent(gameId, mod.id, [], false);
+    if (reset) {
+      onUpdateContent(gameId, mod.id, [], false);
+    }
     readModContent(path.join(stagingPath, mod.installationPath), gameId)
       .then(({ typesFound, empty }) => {
-        onUpdateContent(gameId, mod.id, typesFound, empty);
+        if (typesFound !== mod.attributes.content) {
+          onUpdateContent(gameId, mod.id, typesFound, empty);
+        }
       })
       .catch(err => {
         // this may happen while installing a mod
@@ -87,7 +91,7 @@ function main(context: types.IExtensionContext) {
       if ((mod.state === 'installed')
           && (util.getSafe(mod, ['attributes', 'content'], undefined) === undefined)
           && (mod.installationPath !== undefined)) {
-        setTimeout(() => updateContent(state, mod), 0);
+        setTimeout(() => updateContent(state, mod, false), 0);
       }
       return <ModContent t={context.api.translate} mod={mod} />;
     },
@@ -108,7 +112,7 @@ function main(context: types.IExtensionContext) {
     isGroupable: true,
     isDefaultVisible: false,
     sortFunc: compareArray,
-  } as any);
+  });
 
   const refreshContent = (instanceIds: string[]) => {
     const state = context.api.store.getState();
@@ -116,7 +120,7 @@ function main(context: types.IExtensionContext) {
     instanceIds.forEach(instanceId => {
       const mod = util.getSafe(state.persistent.mods, [gameId, instanceId], undefined);
       if (mod !== undefined) {
-        updateContent(state, mod);
+        updateContent(state, mod, true);
       }
     });
   };
@@ -134,7 +138,7 @@ function main(context: types.IExtensionContext) {
       const state = context.api.store.getState();
       const mod = util.getSafe(state.persistent.mods, [gameId, modId], undefined);
       if (mod !== undefined) {
-        updateContent(state, mod);
+        updateContent(state, mod, true);
       }
     });
 
