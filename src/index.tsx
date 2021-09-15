@@ -1,11 +1,12 @@
 import { byTypeIndex, fileTypes, typeDescription, typeIndices } from './filetypes';
 import ModContent from './ModContent';
 
+import Bluebird from 'bluebird';
 import * as path from 'path';
 import * as React from 'react';
+import * as Redux from 'redux';
 import turbowalk from 'turbowalk';
-import { actions, selectors, types, util } from 'vortex-api';
-import { OptionsFilter } from 'vortex-api';
+import { actions, OptionsFilter, selectors, types, util } from 'vortex-api';
 
 const readQueue = (util as any).makeQueue();
 
@@ -51,9 +52,18 @@ function capitalize(input: string): string {
 
 function main(context: types.IExtensionContext) {
   context.requireVersion('>=0.19.0');
+
+  let contentUpdates: Redux.Action[] = [];
+  const updateDebouncer: util.Debouncer = new util.Debouncer(() => {
+    util['batchDispatch'](context.api.store, contentUpdates);
+    contentUpdates = [];
+    return Bluebird.resolve();
+  }, 500, true);
+
   const onUpdateContent = (gameId: string, modId: string, typesFound: string[], empty: boolean) => {
-    context.api.store.dispatch(actions.setModAttribute(gameId, modId, 'content', typesFound));
-    context.api.store.dispatch(actions.setModAttribute(gameId, modId, 'noContent', empty));
+    contentUpdates.push(actions.setModAttribute(gameId, modId, 'content', typesFound));
+    contentUpdates.push(actions.setModAttribute(gameId, modId, 'noContent', empty));
+    updateDebouncer.schedule();
   };
 
   const updateContent = (state: types.IState, mod: types.IMod, reset: boolean) => {
