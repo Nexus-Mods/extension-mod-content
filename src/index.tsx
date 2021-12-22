@@ -32,15 +32,17 @@ function readModContent(stagingPath: string, gameId: string)
       if (empty && (entries.find(iter => !iter.isDirectory) !== undefined)) {
         empty = false;
       }
-      entries.forEach(entry => {
-        const ext = path.extname(entry.filePath).toLowerCase();
-        const possibleTypes = fileTypes[ext] || [];
-        const ft = possibleTypes.find(iter =>
-          (iter.condition === undefined) || iter.condition(gameId, entry));
-        if (ft !== undefined) {
-          typesFound.add(ft.type);
-        }
-      });
+      entries
+        .filter(entry => !entry.isDirectory)
+        .forEach(entry => {
+          const ext = path.extname(entry.filePath).toLowerCase();
+          const possibleTypes = fileTypes[ext] || [];
+          const ft = possibleTypes.find(iter =>
+            (iter.condition === undefined) || iter.condition(gameId, entry));
+          if (ft !== undefined) {
+            typesFound.add(ft.type);
+          }
+        });
     });
   }, false)
   .then(() => ({ typesFound: Array.from(typesFound), empty }));
