@@ -89,6 +89,7 @@ export const fileTypes: { [ext: string]: IFileType[] } = {
   // gamebryo formats
   '.nif': [{ type: 'mesh' }], // net immerse
   '.xwm': [{ type: 'music' }],
+  '.fuz': [{ type: 'music' }], // audio + lip sync data
   '.bsa': [{ type: 'archive' }],
   '.ba2': [{ type: 'archive' }],
   '.esp': [{ type: 'plugin' }],
