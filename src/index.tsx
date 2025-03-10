@@ -52,6 +52,7 @@ function capitalize(input: string): string {
   return input.charAt(0).toUpperCase() + input.slice(1);
 }
 
+// eslint-disable-next-line max-lines-per-function
 function main(context: types.IExtensionContext) {
   context.requireVersion('>=0.19.0');
 
@@ -80,6 +81,11 @@ function main(context: types.IExtensionContext) {
     }
     readModContent(path.join(stagingPath, mod.installationPath), gameId)
       .then(({ typesFound, empty }) => {
+        const hasFomodOptions = mod.attributes?.installerChoices?.type === 'fomod' && (mod.attributes?.installerChoices?.choices ?? []).length > 0;
+        if (hasFomodOptions) {
+          typesFound.push('fomod');
+          empty = false;
+        }
         if (typesFound !== mod.attributes.content) {
           onUpdateContent(gameId, mod.id, typesFound, empty);
         }

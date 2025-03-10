@@ -20,6 +20,7 @@ export const typeDescription: { [id: string]: ITypeDescription } = {
   extender:   { icon: 'extender', tooltip: 'Extends modding capabilities' },
   config:     { icon: 'config', tooltip: 'Configuration' },
   executable: { icon: 'executable', tooltip: 'Executable (Tools and such)' },
+  fomod:     { icon: 'select-install', tooltip: 'Installed using a FOMOD installer' },
 };
 
 export const typeIndices = Object.keys(typeDescription).reduce((prev, type, idx) => {
